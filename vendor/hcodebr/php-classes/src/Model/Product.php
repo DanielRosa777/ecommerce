@@ -7,9 +7,21 @@
 
     class Product extends Model{
 
+
+
         public static function listAll(){
             $sql = new Sql();
             return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
+        }
+
+        public static function checkList($list){
+            foreach ($list as &$row){
+                $p = new Product();
+                $p->setData($row);
+                $row = $p->getValues();
+            }
+
+            return $list;
         }
 
         public function save()
@@ -75,10 +87,10 @@
                     $image = imagecreatefromjpeg($file['tmp_name']);
                     break;
                 case "gif":
-                    $image = imagecreatefromjpeg($file['tmp_name']);
+                    $image = imagecreatefromgif($file['tmp_name']);
                     break;
                 case "png":
-                    $image = imagecreatefromjpeg($file['tmp_name']);
+                    $image = imagecreatefrompng($file['tmp_name']);
                     break;
             }
 
