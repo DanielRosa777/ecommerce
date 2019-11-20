@@ -18,7 +18,7 @@
 
         $category = new Category();
         $category->get((int)$idcategory);
-        $pagination = $category->getProductsPage($page, 3);
+        $pagination = $category->getProductsPage($page, 4);
 
         $pages = [];
         for ($i = 1; $i <= $pagination['pages'];$i++){
@@ -52,8 +52,48 @@
         $cart = Cart::getFromSession();
 
         $page = new Page();
-        $page->setTpl('cart');
-    })
+        $page->setTpl('cart',[
+            'cart' => $cart->getValues(),
+            'products' => $cart->getProducts()
+        ]);
+    });
+
+    $app->get("/cart/:idproduct/add", function ($idproduct){
+        $product = new Product();
+        $product->get((int)$idproduct);
+        $cart = Cart::getFromSession();
+        $qtd = (isset($_GET['qtd']) ? (int)$_GET['qtd'] : 1);
+        
+        for ($i = 0; $i < $qtd;$i++){
+            $cart->addProduct($product);
+        }
+
+        header("Location: /cart");
+        exit;
+    });
+
+    $app->get("/cart/:idproduct/minus", function ($idproduct){
+        $product = new Product();
+        $product->get((int)$idproduct);
+        $cart = Cart::getFromSession();
+        $cart->removeProduct($product);
+        header("Location: /cart");
+        exit;
+    });
+
+    $app->get("/cart/:idproduct/remove", function ($idproduct){
+        $product = new Product();
+        $product->get((int)$idproduct);
+        $cart = Cart::getFromSession();
+        $cart->removeProduct($product, true);
+        header("Location: /cart");
+        exit;
+    });
+
+
+
+
+
 
 
 ?>
