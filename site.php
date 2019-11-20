@@ -47,5 +47,10 @@
        ]);
     });
 
+    $app->get("/cart", function (){
+        $page = new Page();
+        $page->setTpl('cart');
+    })
+
 
 ?>
