@@ -8,7 +8,7 @@
     class Cart extends Model{
 
         const SESSION = "Cart";
-        const SESSION_ERROR = "CarError";
+        const SESSION_ERROR = "CartError";
 
         public static function getFromSession(){
             $cart = new Cart();
@@ -205,6 +205,7 @@
         public static function getMsgError(){
             $msg = (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : '';
             Cart::clearMsgError();
+            return $msg;
         }
 
         public static function clearMsgError(){
